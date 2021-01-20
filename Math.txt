@@ -1,0 +1,80 @@
+1. Excel Column Number:
+
+    DAB => D*(26^2) + A*(26^1) + B*(26^0)
+
+    int ans = 0;
+    int c = A.length()-1;
+    for(int i=0;i<A.length();i++)
+    {
+        ans = ans + 26*(A[i]-'A'+1)*c;
+        c--;
+    }
+    return ans;
+
+
+2. Find n^x in logN
+    Using Binary Exponentiation 
+    If N is negative we divide the result by 1.0
+
+        long nn = n;
+        if(x==1)
+            return x;
+        double res = 1;
+        double num = x;
+        int flag=n<0?1:0;
+        nn = abs(nn);
+        while(nn)
+        {
+            if(nn&1)
+            {
+                res = res*num;
+                nn--;
+            }
+            else
+            {
+                num = num*num;
+                nn/=2;
+            }
+        }
+        if(flag)
+            res = 1.0/res;
+        return res;
+
+3.Count trailing zeros in factorial of a number
+    Increase the count by n/5 and divide the n by 5
+
+        int count = 0;
+        while(A)
+        {
+            count+=A/5;
+            A/=5;
+        }
+        return count;
+
+4.find GCD in logN
+    Using Euclid Method
+    int gcd(int a, int b)
+    {
+        if(b==0)
+            return a;
+        return gcd(b, a%b);
+    }
+
+5.Grid Unique Paths
+    1.Using DP
+        dp[i][j] = dp[i][j-1] + dp[i-1][j]
+
+    2.Using Combinatorics
+        (n+m-2)C(n-1)
+        
+        long long res = 1;
+        int total = n+m-2;
+        n = min(n-1,total-n+1);
+        
+        for(int i=0;i<n;i++)
+        {
+            res = (res*(total-i))/(i+1);
+        }
+        return res;
+
+    
