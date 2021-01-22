@@ -1,0 +1,146 @@
+1. 2 Sum Problem
+    Store the index of all the numbers and then iterate over the array and check if target-nums[i] is present 
+    or not and if present then the index of that number is not equal to the current index
+
+        unordered_map<int,int>store;
+        int n = nums.size();
+        
+        for(int i=0;i<n;i++)
+        {
+            store[nums[i]]=i;
+        }
+        vector<int>ans;
+        
+        for(int i=0;i<n;i++)
+        {
+            int check = target-nums[i];
+            if(store.find(check)!=store.end() and store[check]!=i)
+            {
+                ans.push_back(i);
+                ans.push_back(store[check]);
+                break;
+                
+            }
+        }
+        return ans;
+
+
+2. 4 Sum Problem
+    1. First Method:
+        sort the array, Place three pointers i j k and for the fourth pointer apply binary search
+
+    2. Second Method:
+        Sort the array and place two pointer i and j 
+        then place two more pointers left and right
+            left : j+1, right = n-1
+        Now move the left and right Pointer according to sum (2 Pointer Approach)
+
+        For removing duplicate, move the left pointer to the different element then the current and similarly for others also
+
+            int n = nums.size();
+            vector<vector<int>>ans;
+            if(n<4)
+            {
+                return ans;
+            }
+            
+            sort(nums.begin(), nums.end());
+            
+            for(int i=0;i<n;i++)
+            {
+                for(int j=i+1;j<n;j++)
+                {
+                    int left = j+1, right = n-1;
+                    int check = target- (nums[i]+nums[j]);
+                    while(left<right)
+                    {
+                        
+                        if((nums[left]+nums[right])>check)
+                            right--;
+                        else if((nums[left]+nums[right])<check)
+                            left++;
+                        else
+                        {
+                            vector<int>temp;
+                            temp.push_back(nums[i]);
+                            temp.push_back(nums[j]);
+                            temp.push_back(nums[left]);
+                            temp.push_back(nums[right]);
+                            ans.push_back(temp);
+                            int first = nums[left], second = nums[right];
+                            
+                            while(left<right and first==nums[left])
+                                left++;
+                            
+                            while(left<right and second==nums[right])
+                                right--;
+                        }
+                    }
+                    while(j+1<n and nums[j]==nums[j+1])
+                        j++;
+                }
+                while(i+1<n and nums[i]==nums[i+1])
+                        i++;
+            }
+            return ans;
+
+4. Longest Subarray with 0 Sum
+    let's say you are at ith index, and sum upto ith index is S, now check if the given sum is present in the map or not, if present then update the len to len = max(len, i-m[S]);
+
+        map<int,int>store;
+        int sum=0;
+        store[0]=-1;
+        int len = 0;
+        for(int i=0;i<n;i++)
+        {
+            sum+=A[i];
+            if(store.find(sum)!=store.end())
+            {
+            
+                len = max(len,i-store[sum]);
+            }
+            else
+                store[sum]=i;
+        }
+        return len;
+
+
+5.Count Number of Subarray with given XOR
+        map<long,long>store;
+        store[0]=1;
+        
+        int n = A.size();
+        int count=  0;
+        int ans = 0;
+        for(int i=0;i<n;i++)
+        {
+            ans^=A[i];
+            if(store.find(ans^B)!=store.end())
+            {
+                
+                count+=store[ans^B];
+                
+            }
+            
+            store[ans]++;
+            
+        }
+        return count;
+
+
+6. Longest substring without repeat
+        int n = s.length();
+        map<char,int>store;
+        
+        int left = 0, right=0;
+        int len = 0;
+        while(right<n)
+        {
+            if(store.find(s[right])!=store.end())
+                left = max(left, store[s[right]]+1);
+            
+            len = max(len, right-left+1);
+            store[s[right]] = right;
+            right++;
+        }
+        return len;
