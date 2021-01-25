@@ -1,0 +1,183 @@
+1. Reverse a linked list
+    1. Through Recursion
+        void solve(ListNode* temp, ListNode* &head)
+        {
+            if(temp==NULL or temp->next==NULL)
+            {
+                head = temp;
+                return;
+            }
+            solve(temp->next,head);
+            ListNode* q = temp->next;
+            q->next = temp;
+            temp->next=NULL;
+        }
+
+    2. Through Iteraive
+        if(head==NULL or head->next==NULL)
+            return head;
+        
+        ListNode* cur = head, *pre = NULL;
+        
+        while(cur!=NULL)
+        {
+            ListNode* next = cur->next;
+            cur->next=pre;
+            
+            pre=cur;
+            cur = next;
+        }
+        head = pre;
+        return head;
+
+2. Middle of linked list
+    1. First Method
+        Find the length of the list and then find the Middle
+            int len = 0;
+            ListNode* temp = head;
+            while(temp!=NULL)
+            {
+                len++;
+                temp=temp->next;
+            }
+            int n = len/2;
+            temp=head;
+            for(int i=0;i<n;i++)
+            {
+                temp=temp->next;
+            }
+            return temp;
+    
+    2. Using Tortoise and hare Method
+        Initialize two pointers slow and fast
+            slow = head, fast=head
+        Now slow will move by one step and fast will move by two step at a time
+        when fast reaches to the end,slow will point to the middle node.
+
+        If fast==NULL then return slow->next(because len of list is even) else return slow
+
+            ListNode* slow = head, *fast=head;
+            
+            while(fast!=NULL and fast->next!=NULL)
+            {
+                slow = slow->next;
+                fast = fast->next;
+                if(fast->next)
+                {
+                    fast=fast->next;
+                }
+            }
+            if(fast==NULL)
+                return slow->next;
+            else
+                return slow;
+
+3. Merge two sorted linked list
+        if(l1==NULL and l2==NULL)
+            return NULL;
+        
+        if(l1==NULL)
+            return l2;
+        
+        if(l2==NULL)
+            return l1;
+        
+        ListNode* dummy=new ListNode(0);
+        ListNode* res = dummy;
+        
+        while(l1!=NULL and l2!=NULL)
+        {
+            if(l1->val>l2->val)
+            {
+                dummy->next = l2;
+                l2 = l2->next;
+                dummy = dummy->next;
+            }
+            else
+            {
+                dummy->next = l1;
+                l1 = l1->next;
+                dummy = dummy->next;
+            }
+        }
+        if(l1!=NULL)
+            dummy->next=l1;
+        if(l2!=NULL)
+            dummy->next=l2;
+        return res->next;
+
+
+4. Remove Nth Node from back of linked list
+    1. First Method
+        :- Find the lenght of the list and then remove the nth node from end...
+            int len = 0;
+            ListNode* temp=head;
+            while(temp!=NULL)
+            {
+                temp=temp->next;
+                len++;
+            }
+            
+            len = abs(n-len);
+            if(len==0)
+            {
+                ListNode* var = head;
+                head=head->next;
+                delete var;
+                return head;
+            }
+            else
+            {
+                temp=head;
+                ListNode* pre = NULL;
+                for(int i=0;i<len;i++)
+                {
+                    pre=head;
+                    head=head->next;
+                }
+                pre->next=head->next;
+                delete head;
+                
+            }
+            return temp;
+    2.Second Method
+        :- First traverse the list upto nth node from starting then start a pointer from the start and travel  upto when the pointer in the previous step reaches to the end...
+
+            if(head==NULL)
+                return head;
+            if(head->next==NULL)
+                return NULL;
+            
+            
+            ListNode* temp=head,*pre=NULL;
+            ListNode* ans = head;
+            for(int i=0;i<n;i++)
+            {
+                head=head->next;
+            }
+            
+            while(head!=NULL)
+            {
+                pre=temp;
+                temp=temp->next;
+                head=head->next;
+            }
+            if(pre==NULL)
+            {
+                ans = ans->next;
+                delete temp;
+                return ans;
+            }
+            pre->next=temp->next;
+            delete temp;
+            return ans;
+
+
+5. Delete a given node when a node is given
+        if(head==NULL)
+            return;
+        
+        ListNode* temp=head->next;
+        head->val=temp->val;
+        head->next = temp->next;
+        delete temp;
