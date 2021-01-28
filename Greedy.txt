@@ -1,0 +1,78 @@
+1.N meeting in one room
+    Sort According to Finish time and check the last meeting with the current start postion.
+
+
+2.Activity Selection
+    Same as N meeting in one room
+
+3.Minimum Number of coins
+    Choose the maximum coin availabel and keep subtracting and follow these approach until all coins are exhaust or number becomes zero.
+
+    It will not give appropriate solution every time, therefore we use DP
+
+4.Fractional KnapSack Problem
+    Choose the Product based on Maximum Profit Ratio(Profit/Weight)
+
+5.Minimum Number of Platforms Required
+    sort(arr,arr+n);
+	sort(dep,dep+n);
+	
+	int ans = 1;
+	int count = 1;
+	
+	int a=1,b=0;
+	
+	while(a<n and b<n)
+	{
+	    if(arr[a]>dep[b])
+	    {
+	        count--;
+	        b++;
+	    }
+	    else
+	    {
+	        count++;
+	        ans = max(ans,count);
+	        a++;
+	    }
+	}
+	return ans;
+
+6.Job Sequencing Problem
+    Sort the array According to Profit in Descending order
+    Place the Product as far as Possible
+        bool comp(Job a, Job b)
+        {
+            return a.profit>b.profit;
+        }
+        sort(arr,arr+n,comp);
+        int nm=INT_MIN;
+        for(int i=0;i<n;i++)
+        {
+            nm = max(nm,arr[i].dead);
+        }
+        
+        int index=0;
+        int store[nm+1];
+        
+        memset(store,0,sizeof(store));
+        int ans = 0;
+        for(int i=0;i<n;i++)
+        {
+            int p = arr[i].profit;
+            int d = arr[i].dead;
+            for(int j=nm;j>=1;j--)
+            {
+                if(store[j]==0 and j<=d)
+                {
+                    index++;
+                    store[j]=p;
+                    ans+=p;
+                    break;
+                }
+            }
+        }
+        pair<int,int>res;
+        res.first = index;
+        res.second = ans;
+        return res;
