@@ -1,0 +1,170 @@
+1. Merge Two Sorted LinkedList
+    if(l1==NULL)
+            return l2;
+        
+        if(l2==NULL)
+            return l1;
+        
+        ListNode* dummy = new ListNode(0);
+        ListNode* ans = dummy;
+        
+        while(l1!=NULL and l2!=NULL)
+        {
+            if(l1->val>l2->val)
+            {
+                dummy->next=l2;
+                l2=l2->next;
+                dummy = dummy->next;
+            }
+            else
+            {
+                dummy->next=l1;
+                l1=l1->next;
+                dummy = dummy->next;
+            }
+        }
+        if(l1!=NULL)
+            dummy->next=l1;
+        if(l2!=NULL)
+            dummy->next=l2;
+        
+        return ans->next;
+
+2.Find the starting point of loop
+        if(head==NULL or head->next==NULL)
+            return NULL;
+        
+        ListNode* slow = head, *fast=head;
+        int index = 0;
+        do{
+            slow = slow->next;
+            if(fast->next)
+                fast=fast->next;
+            else
+                return NULL;
+            
+            if(fast->next)
+                fast=fast->next;
+            else
+                return NULL;
+            if(slow==fast)
+            {
+                fast = head;
+                while(slow!=fast)
+                {
+                    slow=slow->next;
+                    fast=fast->next;
+                }
+                return slow;
+            }
+        }while(slow!=fast);
+        
+        return NULL;
+
+
+3. 3 Sum 
+        vector<vector<int>>ans;
+        sort(nums.begin(),nums.end());
+        
+        int n = nums.size();
+        for(int i=0;i<n;i++)
+        {
+            int low = i+1,high=n-1;
+            while(low<high)
+            {
+                if(nums[low]+nums[high]+nums[i]==0)
+                {
+                    vector<int>temp;
+                    temp.push_back(nums[i]);
+                    temp.push_back(nums[low]);
+                    temp.push_back(nums[high]);
+                    ans.push_back(temp);
+                    
+                    while(low<n and nums[low]==temp[1])
+                        low++;
+                    while(high>=0 and nums[high]==temp[2])
+                        high--;
+                }
+                else if(nums[low]+nums[high]+nums[i]>0)
+                    high--;
+                else
+                    low++;
+            }
+            int temp=nums[i];
+            while(i<n and temp==nums[i])
+                i++;
+            i--;
+        }
+        return ans;
+
+4.Trapping Rainwater
+    1. First Method
+        int ans = 0;
+        
+        int n = height.size();
+        
+        for(int i=0;i<n;i++)
+        {
+            int left = INT_MIN, right = INT_MIN;
+            
+            for(int j=0;j<=i;j++)
+                left = max(left,height[j]);
+            for(int j=i;j<n;j++)
+                right = max(right,height[j]);
+            
+            ans = ans+ min(right,left)-height[i];
+        }
+        return ans;
+
+    2. Second Method
+        int ans = 0;
+        int n = height.size();
+        if(n==0)
+            return 0;
+        int pre[n],suf[n];
+        
+        pre[0]=height[0];
+        suf[n-1]=height[n-1];
+        
+        for(int i=1,j=n-2;i<n;i++,j--)
+        {
+            pre[i]=max(pre[i-1],height[i]);
+            suf[j] = max(suf[j+1], height[j]);
+        }
+        
+        for(int i=0;i<n;i++)
+        {
+            ans = ans+ min(suf[i] ,pre[i])-height[i];
+        }
+        return ans;
+
+
+    3. Third Method
+        int n = height.size();
+        int ans=0;
+        
+        int left=0,right=n-1;
+        int left_max = 0, right_max=0;
+        
+        while(left<right)
+        {
+            if(height[left]<=height[right])
+            {
+                if(height[left]>=left_max)
+                    left_max = height[left];
+                else
+                    ans = ans + left_max-height[left];
+                
+                left++;
+            }
+            else
+            {
+                if(height[right]>=right_max)
+                    right_max = height[right];
+                else
+                    ans = ans + right_max-height[right];
+                
+                right--;
+            }
+        }
+        return ans;

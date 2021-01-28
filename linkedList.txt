@@ -181,3 +181,76 @@
         head->val=temp->val;
         head->next = temp->next;
         delete temp;
+
+
+6. Intersection of Two Linked Lists
+    1.First Method
+        Find the length of the two linked list
+        Travel the longest list upto difference
+        then start traversing the both linked list
+        they will collide at certain position and these is the point of Intersection
+
+            ListNode* find(ListNode* a, ListNode* b, int d)
+            {
+                for(int i=0;i<d;i++)
+                    a=a->next;
+                while(a!=NULL and b!=NULL)
+                {
+                    if(a==b)
+                        return a;
+                    a=a->next;
+                    b=b->next;
+                    
+                }
+                return NULL;
+            }
+
+            int c1 = len(headA);
+            int c2 = len(headB);
+            ListNode* ans=NULL;
+            
+            if(c1>c2)
+            {
+                ans = find(headA,headB,c1-c2);
+            }
+            else
+                ans=find(headB,headA,c2-c1);
+            
+            return ans;
+
+    2. Code dekh ke samagh jaaa...
+        ListNode* a = headA;
+        ListNode* b = headB;
+        
+        if(a==NULL or b==NULL)
+            return NULL;
+        while(a!=b)
+        {
+            a = a==NULL?headB:a->next;
+            b = b==NULL?headA:b->next;
+        }
+        return a;
+
+7. LinkedList is Pallindrome or Not
+        if(head==NULL or head->next==NULL)
+            return true;
+        
+        ListNode* temp=head;
+        ListNode* fast = head, *slow=head;
+        
+        while(fast->next and fast->next->next)
+        {
+            fast=fast->next->next;
+            slow=slow->next;
+        }
+        
+        slow->next=reverse(slow->next);
+        slow=slow->next;
+        while(slow!=NULL)
+        {
+            if(slow->val!=temp->val)
+                return false;
+            slow=slow->next;
+            temp=temp->next;
+        }
+        return true;
