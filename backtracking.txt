@@ -1,0 +1,79 @@
+1.Rat in a Maze
+    void solve(int m[MAX][MAX], int n,vector<string>& ans, int x, int y,string temp, bool visited[MAX][MAX])
+        {
+            if(x<0 or x>=n or y<0 or y>=n)
+                return;
+            
+            if(m[x][y]==0)
+                return;
+            if(x==n-1 and y==n-1)
+            {
+                ans.push_back(temp);
+                return;
+            }
+            if(m[x][y]==1 and visited[x][y]==false)
+            {
+                visited[x][y]=true;
+                solve(m,n,ans,x+1,y,temp+'D',visited);
+                solve(m,n,ans,x,y+1,temp+'R',visited);
+                solve(m,n,ans,x-1,y,temp+'U',visited);
+                solve(m,n,ans,x,y-1,temp+'L',visited);
+                visited[x][y]=false;
+            }
+            
+            // visited[x][y]=false;
+        }
+        vector<string> findPath(int m[MAX][MAX], int n) {
+            // Your code goes here
+            vector<string>ans;
+            if(m[0][0]==0)
+                return ans;
+            bool visited[MAX][MAX];
+            memset(visited,false,sizeof(visited));
+            string temp="";
+            solve(m,n,ans,0,0,temp,visited);
+            sort(ans.begin(),ans.end());
+            return ans;
+        }
+
+
+2.Print All permutations of a string 
+    void solve(string s,int i,int index, int n)
+    {
+        if(index==n-1)
+        {
+            ans.push_back(s);
+            return;
+        }
+        for(int l=i;l<n;l++)
+        {
+            swap(s[i],s[l]);
+            solve(s,i+1,index+1,n);
+            swap(s[i],s[l]);
+        }
+    }
+
+
+3.Word Break
+    void solve(string word,string ans,set<string>& store)
+{
+    
+    if(word.length()==0)
+    {
+        
+        cout<<x<<"\n";
+        return;
+    }
+    
+    for(int i=0;i<word.length();i++)
+    {
+        string left = word.substr(0,i+1);
+        if(store.find(left)!=store.end())
+        {
+            string right = word.substr(i+1);
+           
+            solve(right,ans+left+' ',store);
+        }
+            
+    }
+}
